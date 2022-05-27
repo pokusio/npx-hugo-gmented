@@ -213,7 +213,7 @@ Now, let's mention a few examples, about the part that makes the differences bet
 
 To fully configure our `TypeScript` Compiler, let's first have a look on the big Picture, considering only the case of an  **Interpreted `JavaScript`** :
 
-![TypeScript Conifiguration Keep In Mind](./images/definitive-typescript-configuration.drawio.png)
+![TypeScript Conifiguration Keep In Mind](./images/definitive-typescript-configuration.drawio_.drawio.png)
 
 
 The first one very important thing to always bear in mind, when developing your JavaScript application, is to determine what ae the `JavaScript` Runtimes you want your app to run on : it will determine how many, and what users will be able to use your `JavaScript` software.
