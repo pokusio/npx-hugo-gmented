@@ -644,7 +644,7 @@ npm uninstall --save-dev gulplog
 mkdir -p ./bin.gmented
 
 npx tsc --init --rootDir ./src --outDir ./bin.gmented \
-  --target "es2022" --module "es2022" --moduleResolution node \
+  --target "es2022" --module "es2022" \
   --strict true --alwaysStrict true --allowJs true --noImplicitAny true --experimentalDecorators true \
   --esModuleInterop true --resolveJsonModule true
 
@@ -654,30 +654,7 @@ npx tsc --init --rootDir ./src --outDir ./bin.gmented \
 
 * Then, to be able to use `TypeScript` language in the `gulp.pokus.ts` `gulpfile` itself,  I have to :
   * Use the `--experimentalDecorators` GNU Option of the `TypeScript` compiler, to enable experimental support for TC39 stage 2 draft decorators. That, for Otherwise the `GulpClass` type will not compile.
-  * Use the `--moduleResolution node` GNU Option for typescript modules to be corectly imported for `gulp.pokus.ts` compilation
-
-
-
-
-
-
-
-
-
-
-################# HERE I MUST COTINUE work
-
-For that i must finish testing all infos in https://medium.com/@pleerock/create-a-gulpfile-and-write-gulp-tasks-using-typescript-f08edebcac57
-
-
-And draw my own conclusions with the `npx-hugo-gmented` npm package
-
-
-
-
-
-
-
+  * R
 
 ## ANNEX D : About the alpine image I used for the Containerized tests
 
