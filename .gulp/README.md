@@ -1,3 +1,45 @@
+## Why this npm package ?
+
+I want a `Gulpfile` written in `TypeScript`, to manage he build of the @pokusio/npx-hugo-gmented module at root of [this repository](https://github.com/pokusio/npx-hugo-gmented)
+
+I therefore needed also a full `TypeScript` configuration, which I automated using `npm` scripts, and to which i added a very classical `eslint`/`prettier` configuration
+
+Finally my conclusion is that :
+* if we do a NodeJS TypeScript project :
+  * a project which source  code is in `TypeScript` language
+  * a project which will be executed in a NodeJS environment version `v16.13.0` (output  of `node -v`)
+* Then :
+  * the `--module` option must be `commonjs`,
+  * while i can have `--target` to any Recent `EcmaScript` version, like `--target es2022`, or even `--target es2022`,
+  * the modularization technology which wil be used in generated code will still be `comonjs` because of the `--module` option's value (`commenjs`).
+
+
+Indeed, the bottom line in starting a new `TypeScript` project, is to keep in mind, that if the execution env is `NodeJS`, then :
+* it will be possible, but very difficult to use ESM modules in the generated JavaScript :
+  * About how complex it is to make a "pure `ESM` NodeJS TypeScript project" : https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c#faq
+  * About the issue that happens when `NodeJS` + `--module es2022` (or module is any ESM version) + `TypeScript` : https://docs.joshuatz.com/cheatsheets/node-and-npm/node-esm/#typescript---fully-resolved-import-filepaths-with-extensions
+* About the difference between `--target` and `--module` (so much the bottom question when starting a new typescript project...) :
+  * https://stackoverflow.com/questions/39493003/typescript-compile-options-module-vs-target#:~:text=There%20are%202%20different%20things,supports%20it%20and%20what%20not.
+  * https://stackoverflow.com/questions/41993811/understanding-target-and-module-in-tsconfig
+  * https://medium.com/@tommedema/typescript-confusion-tsconfig-json-module-moduleresolution-target-lib-explained-65db2c44b491
+  * https://www.youtube.com/watch?v=ctJjC5lBAQk (A video released in 2020)
+
+
+All those thoughts and clarifications gave me in the end that way to generate my [tsconfig.json] :
+
+```bash
+npx tsc --init --rootDir ./src/ --outDir ./bin/ \
+ --target "es2022" --module "commonjs" --moduleResolution nodenext \
+ --noImplicitAny true --experimentalDecorators true \
+ --esModuleInterop true --resolveJsonModule true
+
+```
+
+The very particularity of this newly built Gulpfile, is that it has modularization capabilities : the `GulpFile` may be structured from multiple `TypeScript` files, actually from a fully fledged `TypeScript` project.
+
+Indeed, you will see in the `npm run dev` script, that the resulting Gulpfile can be executed from the `./.gulp/bin/gulpfile.js` : `gulp -f ./.gulp/bin/gulpfile.js`
+
+
 ## How to build this npm package
 
 
@@ -106,7 +148,28 @@ Email: (this IS public) bumblebee.pokus.bot@gmail.com
 npm notice Please check your email for a one-time password (OTP)
 Enter one-time password: 78212629
 Logged in as io-pokus on https://registry.npmjs.org/.
-
+:~/hugo-gmented/npx-hugo-gmented/.gulp$ npm profile get
+┌─────────────────┬──────────────────────────────────────────┐
+│ name            │ io-pokus                                 │
+├─────────────────┼──────────────────────────────────────────┤
+│ email           │ bumblebee.pokus.bot@gmail.com (verified) │
+├─────────────────┼──────────────────────────────────────────┤
+│ two-factor auth │ disabled                                 │
+├─────────────────┼──────────────────────────────────────────┤
+│ fullname        │                                          │
+├─────────────────┼──────────────────────────────────────────┤
+│ homepage        │                                          │
+├─────────────────┼──────────────────────────────────────────┤
+│ freenode        │                                          │
+├─────────────────┼──────────────────────────────────────────┤
+│ twitter         │                                          │
+├─────────────────┼──────────────────────────────────────────┤
+│ github          │                                          │
+├─────────────────┼──────────────────────────────────────────┤
+│ created         │ 2022-06-05T08:09:51.438Z                 │
+├─────────────────┼──────────────────────────────────────────┤
+│ updated         │ 2022-06-05T08:09:51.438Z                 │
+└─────────────────┴──────────────────────────────────────────┘
 ```
 
 And there I was back in business, rotating my secrets
@@ -159,7 +222,7 @@ npm run dev
 
 
 
-## ESLint TypeScript configuration
+## `ESLint` `TypeScript` configuration
 
 
 
@@ -167,3 +230,10 @@ npm run dev
 
 * https://khalilstemmler.com/blogs/typescript/eslint-for-typescript/
 * https://dev.to/caelinsutch/setting-up-a-typescript-nodejs-application-with-prettier-and-eslint-53jc
+* About how complex it is to make a "pure `ESM` NodeJS TypeScript project" : https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c#faq
+* About the issue that happens when `NodeJS` + `--module es2022` (or module is any ESM version) + `TypeScript` : https://docs.joshuatz.com/cheatsheets/node-and-npm/node-esm/#typescript---fully-resolved-import-filepaths-with-extensions
+* About the difference between `--target` and `--module` (so much the bottom question when starting a new typescript project...) :
+  * https://stackoverflow.com/questions/39493003/typescript-compile-options-module-vs-target#:~:text=There%20are%202%20different%20things,supports%20it%20and%20what%20not.
+  * https://stackoverflow.com/questions/41993811/understanding-target-and-module-in-tsconfig
+  * https://medium.com/@tommedema/typescript-confusion-tsconfig-json-module-moduleresolution-target-lib-explained-65db2c44b491
+  * https://www.youtube.com/watch?v=ctJjC5lBAQk (A video released in 2020)

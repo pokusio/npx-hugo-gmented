@@ -1,6 +1,6 @@
 {
   "name": "@pokusio/hugo-gmented-gulp",
-  "version": "0.0.0-alpha",
+  "version": "0.0.0-omega",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

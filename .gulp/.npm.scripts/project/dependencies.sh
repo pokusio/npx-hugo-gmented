@@ -114,18 +114,43 @@ if [ -f ./.prettierrc.yaml ]; then
 fi;
 
 cat <<EOF>./.eslintrc.yaml
-env:
-  node: true
-extends:
-  - plugin:@typescript-eslint/recommended
-  - prettier/@typescript-eslint
-  - plugin:prettier/recommended
-parser: '@typescript-eslint/parser'
-parserOptions:
-  ecmaVersion: 9
-  project: ./tsconfig.json
-plugins:
- - '@typescript-eslint'
+# For all ESLint Options :  https://eslint.org/docs/user-guide/configuring/language-options
+root: true
+overrides:
+  - files:
+      - "src/**/*.ts" # for Globs definitions : https://eslint.org/docs/user-guide/configuring/configuration-files#relative-glob-patterns
+    # excludedFiles: '**/*.js' # will not throw an error, but it does not help excluding JavaScript files from linting... instead i use [.eslintignore] file.
+# --- chirurgie
+    env:
+      # es2020: true # first version to support lookbehind with regexp # just like tsconfig --target ? actually a bit ower than es2022
+      # es6: true
+      es2022: true # first version to support lookbehind with regexp # just like tsconfig --target ? es2022
+      node: true # so that "module" is defined
+      # browser: true # so that "window" is defined
+    extends:
+      - plugin:@typescript-eslint/recommended
+      - plugin:prettier/recommended
+    parser: '@typescript-eslint/parser'
+    parserOptions: # https://eslint.org/docs/user-guide/configuring/language-options#specifying-parser-options
+      project:
+        - tsconfig.json # see https://github.com/oblique-bit/oblique/blob/master/.eslintrc.yml
+      ecmaVersion: 13 # see https://eslint.org/docs/user-guide/configuring/language-options#specifying-environments
+      # sourceType: module
+    plugins:
+      - '@typescript-eslint'
+    rules:
+      "@typescript-eslint/ban-types":
+        - error
+        - types:
+            String: false
+            Boolean: false
+            Number: false
+            Symbol: false
+            '{}': false
+            Object: false
+            object: false
+            Function: false
+          extendDefaults: true
 EOF
 
 cat <<EOF>./.prettierrc.yaml
@@ -133,7 +158,7 @@ tabWidth: 2
 singleQuote: true
 EOF
 
-# I don't want to lint generated javascript files, linting is for now just about linthing the typescript files only
+# I don't want to lint generated javascript files, linting is for now just about linting the typescript files only
 cat <<EOF>./.eslintignore
 bin/**/*
 EOF
