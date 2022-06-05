@@ -1,0 +1,25 @@
+# --- Celui-là marche c'est sûr
+env:
+  node: true
+extends:
+  - plugin:@typescript-eslint/recommended
+  - plugin:prettier/recommended
+parser: '@typescript-eslint/parser'
+# parserOptions:
+  # project: ./tsconfig.json
+  # ecmaVersion: 9
+plugins:
+  - '@typescript-eslint'
+rules:
+  "@typescript-eslint/ban-types":
+    - error
+    - types:
+        String: false
+        Boolean: false
+        Number: false
+        Symbol: false
+        '{}': false
+        Object: false
+        object: false
+        Function: false
+      extendDefaults: true

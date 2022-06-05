@@ -66,13 +66,19 @@ docker exec -it testnode-alpine sh -c "cd ./my-ts-project/ && cat ./tsc.compiler
 
 # --- Now I re-generate the whole project to run the build with gulp
 
-
+# plan: i will generate a script file and execute it as shell script in container
 
 npx tsc --init --rootDir ./src --outDir ./bin.gmented \
-  --target "es2022" --module "es2022" \
+  --target "es2020" --module "es2020" \
   --strict true --alwaysStrict true --allowJs true --noImplicitAny true --experimentalDecorators true \
   --esModuleInterop true --resolveJsonModule true
 
+
+# npx tsc --init --rootDir ./src --outDir ./bin.gmented \
+#   --target "es2022" --module "es2022" \
+#   --strict true --alwaysStrict true --allowJs true --noImplicitAny true --experimentalDecorators true \
+#   --esModuleInterop true --resolveJsonModule true
+#
 ```
 
 
@@ -289,7 +295,7 @@ Okay, so, now that we have our big picture in mind, here are the questions we wa
   * **`--target`** : that option helps us specify what is commonly called _"The `JavaScript` version"_, but should be called  called _"The `ECMAScript` version"_ :
     * that's the version of ECMAScript we want the compiler to use to generate JavaScript code.
     * So it won't necessarily spcify what kind of modularization will be used, but it never the less sets "The JavaSCript core version"
-    * As this article is written, we are middle 2022, so i will use `--target "es2022"`
+    * As this article is written, we are middle 2022, so i will use `--target "es2020"` : that, because TypeScript from 2021 is just one year old, can't speak too young, `2020` is old enough (to begin speaking, aka having a stable language a lot of people talk).
   * **`--moduleResolution `** :  That's about the type of modularization in the TypeScript code tyou write :
     * Specify how `TypeScript` looks up a file from a given module specifier.
     * one of: `classic`, `node`, `node16`, `nodenext`
@@ -301,7 +307,7 @@ Okay, so, now that we have our big picture in mind, here are the questions we wa
       * found out that to be able to compile the `TypeScript` source code in my `gulp.pokus.ts` Gulp File, and in particular to be able to use the [`gulpclass` `npm` package](https://www.npmjs.com/package/gulpclass), i must use the `--moduleResolution node` GNU Option of the `TypeScript` compiler.
   * **`--module`** : That's about the type of modularization in the generated `JavaScript` code. That option helps us specify what modularization type is used when compîler generates JavaScript :
     * main options are `none, commonjs, amd, umd, system, es6/es2015, es2020, es2022, esnext, node16, nodenext`
-    * we will choose `--module "es2022"`, and we will use the `--esModuleInterop`  to ease importing requirejs modules
+    * we will choose `--module "es2020"`, and we will use the `--esModuleInterop`  to ease importing requirejs modules
   * **`--resolveJsonModule true`** : We use that option to enable importing `.json` files (like configuration files `import configuration from './path/to/my/configurationFile.json'`).
   * **`--rootDir` and `--outDir`** GNU Options are here :
     * to specify in which folder the soruce code to compile resides,
@@ -345,10 +351,17 @@ Okay, so, now that we have our big picture in mind, here are the questions we wa
 All in all, this gives us the following tsc command to generate our donfiguration :
 
 ```bash
+
 npx tsc --init --rootDir ./src --outDir ./bin.gmented \
-  --target "es2022" --module "es2022" \
+  --target "es2020" --module "es2020" \
   --strict true --alwaysStrict true --allowJs true --noImplicitAny true --experimentalDecorators true \
   --esModuleInterop true --resolveJsonModule true
+
+
+# npx tsc --init --rootDir ./src --outDir ./bin.gmented \
+#   --target "es2022" --module "es2022" \
+#   --strict true --alwaysStrict true --allowJs true --noImplicitAny true --experimentalDecorators true \
+#   --esModuleInterop true --resolveJsonModule true
 
 ```
 
@@ -644,7 +657,7 @@ npm uninstall --save-dev gulplog
 mkdir -p ./bin.gmented
 
 npx tsc --init --rootDir ./src --outDir ./bin.gmented \
-  --target "es2022" --module "es2022" --moduleResolution node \
+  --target "es2020" --module "es2020" --moduleResolution node \
   --strict true --alwaysStrict true --allowJs true --noImplicitAny true --experimentalDecorators true \
   --esModuleInterop true --resolveJsonModule true
 
@@ -654,12 +667,49 @@ npx tsc --init --rootDir ./src --outDir ./bin.gmented \
 
 * Then, to be able to use `TypeScript` language in the `gulp.pokus.ts` `gulpfile` itself,  I have to :
   * Use the `--experimentalDecorators` GNU Option of the `TypeScript` compiler, to enable experimental support for TC39 stage 2 draft decorators. That, for Otherwise the `GulpClass` type will not compile.
-  * Use the `--moduleResolution node` GNU Option for typescript modules to be corectly imported for `gulp.pokus.ts` compilation
+  * Use the `--moduleResolution node` GNU Option for typescript modules to be corectly imported for `gulp.pokus.ts` compilation. I am using ES2020 as for both --module and --target options, so this means by default this value should be "classic", right
 
 
+* Now for compiling the bulpfile.ts to gulpfile.js and then execute the gulpfile, i need a different typescript compiler configuration file, namely `tsconfig.gulp.json` :
+  * "rootDir": "./.gulp/src",
+  * "outDir": "./.gulp/bin",
+  * SO I will compile all files from the `./.gulp/src` and put the generated JavaScript Files into the `./.gulp/bin` folder, and then execute the resulting `./.gulp/bin/gulpfile.js` file. Iwill certaainly compile all typescript into one single `./.gulp/bin/gulpfile.js`
 
 
+```bash
+mkdir -p ./.gulp/src/
+mkdir -p ./.gulp/bin/
 
+touch ./.gulp/src/gulpfile.ts
+touch ./.gulp/src/gulp.pokus.ts
+
+touch ./.gulp/bin/gulpfile.js
+
+cp tsconfig.json tsconfig.tmp.json
+rm tsconfig.json
+
+
+npx tsc --init --rootDir ./.gulp/src --outFile ./.gulp/bin/gulpfile.js \
+  --target "es2020" --module "es2020" --moduleResolution node \
+  --strict true --alwaysStrict true --allowJs true --noImplicitAny true --experimentalDecorators true \
+  --esModuleInterop true --resolveJsonModule true
+
+cp tsconfig.json tsconfig.gulp.json
+rm tsconfig.json
+cp tsconfig.tmp.json tsconfig.json
+rm tsconfig.tmp.json
+
+tsc -p tsconfig.gulp.json
+
+```
+
+
+Note those GNU Option 's `--help` documentation :
+
+>
+> --project, -p
+> Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'.
+>
 
 
 
@@ -799,7 +849,14 @@ default: false
 * https://blog.logrocket.com/exploring-advanced-compiler-options-typescript/
 * About approaches to typescript compilation (or so called "transpilation") :
   * https://docs.adonisjs.com/guides/typescript-build-process :  very interesting how they think like me, no compiler except `tsc` it self, only `ts-node` can transpile just as `tsc`
-* gulp :
+* `gulp` :
   * https://github.com/gulpjs/gulp/blob/master/docs/getting-started/2-javascript-and-gulpfiles.md#transpilation
   * https://gulpjs.com/docs/en/getting-started/javascript-and-gulpfiles/#transpilation
   * https://medium.com/@pleerock/create-a-gulpfile-and-write-gulp-tasks-using-typescript-f08edebcac57
+* Very good to understand which files are included excluded in by `tsc` :
+  * https://dev.to/vdegenne/i-finally-understand-typescript-outdir-include-exclude-configuration-properties-5545
+* About `TypeSript` Modularization technologies :
+  * about `es2020` `ECMAScript` modules https://www.typescriptlang.org/docs/handbook/2/modules.html
+  *
+* About a few compile time / runtime issues I met :
+  * https://bobbyhadz.com/blog/javascript-syntaxerror-cannot-use-import-statement-outside-module

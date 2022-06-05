@@ -1,0 +1,51 @@
+{
+  "name": "hugo-gmented-gulp",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gulp:clean": "rm -fr ./bin && mkdir -p ./bin",
+    "gulp:transpile:debug": "npx tsc --project ./tsconfig.json --listEmittedFiles",
+    "gulp:transpile": "npx tsc --project ./tsconfig.gulp.json",
+    "g:t": "npm run gulp:clean && npm run gulp:transpile",
+    "g:t:d": "npm run gulp:clean && npm run gulp:transpile:debug",
+    "g:r": "gulp -f ./bin/gulpfile.js",
+    "g:r:p": "gulp -f ./bin/gulp.pokus/index.js",
+    "g:t:r": "npm run gulp:clean && npm run gulp:transpile && gulp -f ./bin/gulpfile.js",
+    "g:copy:json": "cp ./src/package.json ./bin/ && cp ./src/gulp.pokus/package.json ./bin/gulp.pokus/",
+    "g:gen:mjs": "cp ./bin/gulpfile.js ./bin/gulpfile.mjs && cp ./bin/gulp.pokus/index.js ./bin/gulp.pokus/index.mjs",
+    "g:experiment": "npm run g:experiment:5",
+    "g:experiment:1": " echo \" >>> POKUS >>>> just checking >>> Current directory is : [$(pwd)] . >>>>> \" && npm run g:t:d && export NODE_OPTIONS='--no-warnings --loader ts-node/esm' && npx nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/gulpfile.ts && echo \" >>> POKUS >>>> just checking >>> [$(pwd)] . >>>>> \"",
+    "g:experiment:2": " echo \" >>> POKUS >>>> just checking >>> Current directory is : [$(pwd)] . >>>>> \" && npm run g:t:d && export NODE_OPTIONS='--no-warnings --loader ts-node/esm --input-type=module' && npx nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/gulpfile.ts && echo \" >>> POKUS >>>> just checking >>> [$(pwd)] . >>>>> \"",
+    "g:experiment:3": " echo \" >>> POKUS >>>> just checking >>> Current directory is : [$(pwd)] . >>>>> \" && npm run g:t:d && export NODE_OPTIONS='--no-warnings --loader ts-node/esm --input-type=module' && node --no-warnings --loader ts-node/esm --input-type=module ./bin/gulpfile.js && echo \" >>> POKUS >>>> just checking >>> [$(pwd)] . >>>>> \"",
+    "g:experiment:4": " echo \" >>> POKUS >>>> just checking >>> Current directory is : [$(pwd)] . >>>>> \" && npm run g:t:d && npm run g:copy:json && export NODE_OPTIONS='--no-warnings --loader ts-node/esm --input-type=module' && node --no-warnings --loader ts-node/esm ./bin/gulpfile.js && echo \" >>> POKUS >>>> just checking >>> [$(pwd)] . >>>>> \"",
+    "g:experiment:5": " echo \" >>> POKUS >>>> just checking >>> Current directory is : [$(pwd)] . >>>>> \" && npm run g:t:d && npm run g:copy:json && npm run g:gen:mjs && export NODE_OPTIONS='--no-warnings --loader ts-node/esm --input-type=module' && node --no-warnings --loader ts-node/esm ./bin/gulpfile.mjs && echo \" >>> POKUS >>>> just checking >>> [$(pwd)] . >>>>> \"",
+    "g:experiment:6": " echo \" >>> POKUS >>>> just checking >>> Current directory is : [$(pwd)] . >>>>> \" && npm run g:t:d && npm run g:copy:json && export NODE_OPTIONS='--no-warnings --loader ts-node/esm' && node --no-warnings --loader ts-node/esm ./bin/gulpfile.js && echo \" >>> POKUS >>>> just checking >>> [$(pwd)] . >>>>> \"",
+    "g:r:6": " echo \" >>> POKUS >>>> just checking >>> Current directory is : [$(pwd)] . >>>>> \" && export NODE_OPTIONS='--no-warnings --loader ts-node/esm' && node --no-warnings --loader ts-node/esm ./bin/gulpfile.js && echo \" >>> POKUS >>>> just checking >>> [$(pwd)] . >>>>> \""
+  },
+  "exports": "./bin/gulpfile.js",
+  "type" : "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pokusio/npx-hugo-gmented.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pokusio/npx-hugo-gmented/issues"
+  },
+  "homepage": "https://github.com/pokusio/npx-hugo-gmented/blob/master/.gulp/src#readme",
+  "devDependencies": {
+    "@types/gulp": "^4.0.9",
+    "@types/gulp-util": "^3.0.36",
+    "del": "^6.1.1",
+    "gulp": "^4.0.2",
+    "gulp-util": "^3.0.8",
+    "gulpclass": "^0.2.0",
+    "gulplog": "^1.0.0",
+    "nodemon": "^2.0.16",
+    "ts-node": "^10.8.0",
+    "typescript": "^4.7.2"
+  }
+}

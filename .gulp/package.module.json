@@ -1,0 +1,41 @@
+{
+  "name": "hugo-gmented-gulp",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gulp:clean": "rm -fr ./.gulp/bin && mkdir -p ./.gulp/bin",
+    "gulp:transpile:debug": "tsc --project ./tsconfig.gulp.json --listEmittedFiles",
+    "gulp:transpile": "tsc --project ./tsconfig.gulp.json",
+    "g:t": "npm run gulp:clean && npm run gulp:transpile",
+    "g:t:d": "npm run gulp:clean && npm run gulp:transpile:debug",
+    "g:r": "gulp -f .gulp/bin/gulpfile.js",
+    "g:r:p": "gulp -f .gulp/bin/gulp.pokus/index.js",
+    "g:t:r": "npm run gulp:clean && npm run gulp:transpile && gulp -f .gulp/bin/gulpfile.js"
+  },
+  {
+    "type": "module"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pokusio/npx-hugo-gmented.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pokusio/npx-hugo-gmented/issues"
+  },
+  "homepage": "https://github.com/pokusio/npx-hugo-gmented/blob/master/.gulp/src#readme",
+  "devDependencies": {
+    "@types/gulp": "^4.0.9",
+    "@types/gulp-util": "^3.0.36",
+    "del": "^6.1.1",
+    "gulp": "^4.0.2",
+    "gulp-util": "^3.0.8",
+    "gulpclass": "^0.2.0",
+    "gulplog": "^1.0.0",
+    "ts-node": "^10.8.0",
+    "typescript": "^4.7.2"
+  }
+}

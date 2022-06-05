@@ -1,1 +1,2 @@
-eval(require("typescript").transpile(require("fs").readFileSync("./gulp.pokus.ts").toString()));
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
