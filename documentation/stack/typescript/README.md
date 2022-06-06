@@ -30,9 +30,21 @@ In the present work, I will in the conclusion explain you :
     * and they certainly do not understand a pattern like Abstract Factory in Java
     * and they certainly do not understand what are:
       * methods / function dynamic polymorphism (passing as arguments, objects from different types, only assuming those types implement one same interface)
-      * Java JRE Pluggable Extension Mechanism based on lib/ext
-      * Dynamic Class Loading () Java JDK pluggable architecture in Java
-      * https://docs.oracle.com/javase/7/docs/technotes/guides/extensions/spec.html
+      * Java JRE Standard Override Mechanism :
+        * It is based on the `-Djava.endorsed.dirs <path to directory containing jars to load>`
+        * You can check in a java program the value of that `java.endorsed.dirs` Java JRE Sytstem variable, by excuting `System.getProperty("java.endorsed.dirs")`
+        * This system is well known for example :
+          * to set what implementation are used for networking example `CORBA` protocol used for webservices
+          * to set a specific XML SAX parser https://docs.oracle.com/javase/8/docs/technotes/guides/standards/
+      * see https://docs.oracle.com/javase/8/docs/technotes/guides/standards/ , the "`Endorsed Standards`" section.
+      * How you can implement an inversion of control / modularization framework using sring like techniques :
+        * in a configuration file, we find class names for objects, and maybe the path to the binary defining those classes
+        * the ioc program creates instances of that type (a Class is a Type), providing those classes do implement a given interfaces: in Spring Framework, that's called beans
+        * the program managed by ioc, runs with the provided instances, to complete its tasks.
+        * i will demo that :
+          * i will implement an ioc program and will deploy a demo app into that container
+          * i will compare using a rather recent java framework : https://quarkus.io/ and springboot
+          * all in distroless containers
 * How [this other article](https://docs.joshuatz.com/cheatsheets/node-and-npm/node-esm/#typescript---fully-resolved-import-filepaths-with-extensions) :
   * shows much more interesting content about the problem of starting a TypeScript / NodeJS ESM Module project
   * is astonishingly related to the reasons why I am developing `Hugo-Gmented`, starting with this repo's npx module, see indeed :
