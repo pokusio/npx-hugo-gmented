@@ -3,19 +3,85 @@
 
 I first began with an extremely simple project consisting of the project structure in the  `./documentation/stack/typescript/initial-code` Folder
 
-From there, I wanted the ./bin/index.js to be compiled from `TypeScript`.
-
-
-So I executed the following steps :
+From there, I wanted the ./bin/index.js to be compiled from `TypeScript`, so I executed the following steps :
 
 ```bash
 npm install --save-dev typescript @types/node
 
 npx tsc --init --rootDir src --outDir bin
 
-
-
 ```
+
+And tha's where this work began.
+
+This work is about actually understanding how to start a new `TypeScript` project, a question which a lot of people have experienced, ending with les or more success.
+
+In the present work, I will in the conclusion explain you :
+
+* Why [this article](https://medium.com/@tommedema/typescript-confusion-tsconfig-json-module-moduleresolution-target-lib-explained-65db2c44b491) is completely wrong about probably every single one of its assertions.
+  * That the work behind this article is very likely to be reduced to:
+    * running `tsc --init --help`,
+    * reading the `--target`, `--module`, `--moduleResolution`, `--lib` documentation, misunderstanding it completely, and imagining foolish things like the assetion about polyfill
+  * That this article is completely missing the point especially about the `--lib` option, for one good reason :
+    * because "front end people", are really not used to what copmpilation is,
+    * for example they are not used to read and run a Makefile with several target systems,
+    * an,other example those developers would not ever be able to just quote one or two Golang compiler options
+    * even more than that, those people certainly have never worked with a framework like Spring,
+    * and they certainly do not understand a pattern like Abstract Factory in Java
+    * and they certainly do not understand what are:
+      * methods / function dynamic polymorphism (passing as arguments, objects from different types, only assuming those types implement one same interface)
+      * Java JRE Pluggable Extension Mechanism based on lib/ext
+      * Dynamic Class Loading () Java JDK pluggable architecture in Java
+      * https://docs.oracle.com/javase/7/docs/technotes/guides/extensions/spec.html
+* How [this other article](https://docs.joshuatz.com/cheatsheets/node-and-npm/node-esm/#typescript---fully-resolved-import-filepaths-with-extensions) :
+  * shows much more interesting content about the problem of starting a TypeScript / NodeJS ESM Module project
+  * is astonishingly related to the reasons why I am developing `Hugo-Gmented`, starting with this repo's npx module, see indeed :
+    * [this other article](https://docs.joshuatz.com/cheatsheets/node-and-npm/node-esm/#typescript---fully-resolved-import-filepaths-with-extensions) was made by `joshuatz` on his personal website https://joshuatz.com/
+    * `Joshua TZ` made his personal website https://joshuatz.com/ using the [Gatsby](https://gatsby.io) 's Headless CMS, while I made my personal website using `Hugo` :
+      * There are 2 families of headless CMS , in this world : the Git based headless CMS, and the API based Headless CMS,
+      * Hugo is the world 's number one Git-based headless CMS by far
+      * Gatsby is the world's number one API-based headless CMS by far
+      * all other headless CMS in the world are in iether of those families, there are even hybrids, but none of them match `Gatsby` and `Hugo` :
+        * directus
+        * strapi
+        * etc...
+    * `Joshua TZ` 's Gtihub profile https://github.com/joshuatz has a few good looking and interesting things :
+      * How come he also worked with cloudinary :) (his little tool is interesting as far as pokus is concerned) : https://github.com/joshuatz/desktop-cloud-transform
+      * `Hugo Gmented` is related to one of my main projects : `Pokus`
+      * In one of the website project i worked on using `hugo`, I started indeed using image CDN management for deployment, especially using Gulp tasks for image processing :
+        * I used gulp taks to process tasks on iamge files : resizing, compressing, image transformations (adding special effects like blurring)
+        * I used deployment pipeline to deploy gulp processed images to iamge CDN :
+          * one gulp tasks would deploy image files to a CDN , in dev environment ( a local iamge CDN installed with docker comppose, it could even be directus used as a pure CDN)
+          * one gulp tasks would deploy image files to a CDN , in staging environment : cloudinary, if cloudinary accepts multiple envionments / organizations. I cloudinary would not support multiple organizations or environments, i will use Optimole on staging.
+          * one gulp tasks would deploy image files to a CDN , in production environment : cloudinary and / or Optimole, the one that has
+          * best would be that iamge CDNs support environment concept, in order to be able to have staging and production CDNs, and without relying on that, here is how i will implement that :
+            * staging and production environment images will be deployed to Cloudinary and Optimole: for each image, it is deployed either to Optimole, or to Cloudinary
+            * the same image, deployed to staging and production environments, changes only by the path to access the image. the change is made in the image file name using `${IMAGE_FILENAME}` for production,  `staging_${IMAGE_FILENAME}` for staging
+            * problem there, is that production is always up :
+              * we want to use as much as possible in the limits of any kind of plan: so we test that ability to manage not exceeding any given plan, using only free plans
+              * our goal is to deploy a set of images, across multiple CDNs, to take advantage as much as possible from all free plans of a given service, relying on multiple service providers
+              * Ok, so what will do constantly here is executing a gulp tasks which :
+                * for each iamge file
+                * upload the image file to one of the CDNs, based on a yaml configuration file `dogman.yaml`
+                *
+        * I naturally started looking for all image CDNs offering free plans, and among them I found `Cloudinary` : so did `Joshua TZ`, i think most fullstack developers / frontend devs who have worked in large websites projects, start by trying Cloudinary
+
+
+
+All in all, in a scond episode of this article we will :
+
+* Explain in detail ARchitecture at the center of all of this : Our TypeScript app lifecycle architecture, from source code to deployment
+* Explain what it is that front end dev don't understand :
+  * building a Goglang executable for different target artchitectures
+  * building a C language executable for different target artchitectures
+  * building 2 C language executables and make use of an API : programming a simple plugin system in C Language, with an API concept
+  * Building two Java applications to demonstrate programming a simple plugin system in C Language, with an API concept :
+    * we wil also demonstrate invrersion of Control and Dynamic Polymorphism patterns
+
+
+That will show what we actually mean by interface
+
+
 
 
 ## Making sense of your `tsconfig.json` `TypeScript` configuration
@@ -834,6 +900,14 @@ default: false
 ```
 
 
+## More `TypeScript` : class interfaces and design patterns
+
+A few references :
+
+* https://www.typescriptlang.org/docs/handbook/classes.html
+* https://www.typescriptlang.org/docs/handbook/interfaces.html
+
+
 
 ## References
 
@@ -860,3 +934,6 @@ default: false
   *
 * About a few compile time / runtime issues I met :
   * https://bobbyhadz.com/blog/javascript-syntaxerror-cannot-use-import-statement-outside-module
+* About `TypeScript` classes, interfaces :
+  * https://www.typescriptlang.org/docs/handbook/classes.html
+  * https://www.typescriptlang.org/docs/handbook/interfaces.html

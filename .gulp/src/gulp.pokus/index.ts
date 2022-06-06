@@ -8,6 +8,9 @@ import * as gutil from 'gulp-util';
 // import * as gulp from 'gulp';
 import * as del from 'del';
 
+// custom modularized tasks example : CDN Tasks
+import * as pokus_tasks from './tasks';
+
 /*
 
 export HUGO_THEME_GIT_URI="my test value for [HUGO_THEME_GIT_URI] "
