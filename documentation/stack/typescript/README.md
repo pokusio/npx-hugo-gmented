@@ -920,6 +920,45 @@ A few references :
 * https://www.typescriptlang.org/docs/handbook/interfaces.html
 
 
+## Building my own CDN
+
+What if i built my self  a cdn ? Is there any meaning about a CDN deployed on one single machine ?
+
+
+* About KubeCDN (not usable in production, no support, but helps understanding multi regions deployments) : https://blog.insightdatascience.com/how-to-build-your-own-cdn-with-kubernetes-5cab00d5c258
+* About another design using varnish : https://dzone.com/articles/build-your-own-cdn-in-5-steps
+* https://dev.to/megajakob/how-to-build-your-own-cdn-io1
+* What i wanna learn to terraform :
+  * geoDNS
+  * load balancing between geoDNS regions
+  * load balancing between different cloud provider regions
+  * start a deep dive into networking, `BGP` / `IGP`, `vxlan` and `vlan`
+  * how coudl i terraform and operate networks with pokusbox cloud provider
+
+
+A first goal for me is to setup somehing that can act as CDN loally on the developers machine (I will set 2 docker compose on same ip address):
+* Since CDN is alot about DNS GeoDNS, laodbalancing between cloud provider regions (cloudflare is so perfect for all of this),
+* well all i need is a server that will quickly deliver static files maybe with  caching capabilities
+* So i will try those approaches :
+  * always a docker compose :
+    * one service for reverse proxy, with caching capabilities, and i want only the images, not other urls, to be cached :
+      * caddy:
+        * i would like maybe caddy reverse proxy, it has cache plugin
+        * https://caddy.community/t/state-of-http-caching-in-caddy-2/11564/3
+        * the cache plugin to use with caddy : https://github.com/caddyserver/cache-handler
+      * varnish:
+        * cccc
+      * nginx:
+        * https://github.com/djmaze/docker-caching-proxy
+    * i want only images to be cached:
+      * so the docker-compose for the website will be different than the docker-compose for the CDN,
+      * i might even need different ip addresses (not sure at least two different docker compose to use completely different reverse proxy settings for website and cdn)
+      * Static Website deployment : I want caddy reverse proxy (built from golang source code) for website deployement
+      * CDN deployment : i will probably have to use minio or directus with NGINX set for caching
+    * static asets delivery :
+      * S3 bucket minio
+      * or Directus cms cdn capabilitis
+
 
 ## References
 
